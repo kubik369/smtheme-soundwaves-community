@@ -592,7 +592,18 @@ for ip, p in ipairs(GAMESTATE:GetHumanPlayers()) do
 			self:diffuse(Color.White):zoom(0.7):shadowlength(2)
 		end;
 		OnCommand=function(self)
-			self:settext(GAMESTATE:GetPlayerState(p):GetPlayerOptionsString(0))
+			local playerOptionsString = GAMESTATE:GetPlayerState(p):GetPlayerOptionsString(0)
+			local musicRateString = string.format("%.2f", GAMESTATE:GetSongOptionsObject("ModsLevel_Current"):MusicRate())
+			local isMusicRateModified = musicRateString ~= "1.00"
+			
+			local modifiersString
+			if isMusicRateModified then
+				modifiersString = string.format("%sx Rate, %s", musicRateString, playerOptionsString)
+			else
+				modifiersString = playerOptionsString
+			end
+
+			self:settext(modifiersString)
 			self:diffusealpha(0):sleep(0.8):decelerate(0.6):diffusealpha(1)
 			end;
 		OffCommand=function(self)
