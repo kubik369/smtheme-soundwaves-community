@@ -598,7 +598,7 @@ for ip, p in ipairs(GAMESTATE:GetHumanPlayers()) do
 			
 			local modifiersString
 			if isMusicRateModified then
-				modifiersString = string.format("%sx Rate, %s", musicRateString, playerOptionsString)
+				modifiersString = string.format("%s, %sxMusic", playerOptionsString, musicRateString)
 			else
 				modifiersString = playerOptionsString
 			end
