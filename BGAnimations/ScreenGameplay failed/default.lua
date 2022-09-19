@@ -2,46 +2,29 @@ return Def.ActorFrame {
 		-- BG animation
 	Def.Quad {
 		InitCommand=function(self)
-			self:zoomto(SCREEN_WIDTH,1):vertalign(top):x(SCREEN_CENTER_X):y(SCREEN_TOP)
-			self:diffuse(color("#750000")):diffusealpha(0.9)
+			self:FullScreen():diffuse(color("#000000")):diffusealpha(0)
+		end,
+		OnCommand=function(self)
+			self:decelerate(4.0):diffusealpha(0.5)
 		end;
+		};
+
+	LoadActor("_sound") .. {
+		OnCommand=function(self) self:queuecommand("Sound") end;
+		SoundCommand=function(self) self:play() end;
+	};	
+	Def.Sprite {
+		Texture="_you_died_background",
+		InitCommand=function(self) self:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y):draworder(105) end,
 		StartTransitioningCommand=function(self)
-			self:decelerate(0.4):zoomto(SCREEN_WIDTH,SCREEN_HEIGHT)
-		end;
-	  };
-	-- Scanline
-	Def.Quad {
-		InitCommand=function(self)
-			self:zoomto(SCREEN_WIDTH,5):vertalign(top):x(SCREEN_CENTER_X):y(SCREEN_TOP)
-			self:diffuse(color("#e57b7b"))
-		end;
-		StartTransitioningCommand=function(self)
-			self:decelerate(0.4):y(SCREEN_BOTTOM)
-		end;
-	  };
-	  
-	---Def.ActorFrame {
-	Def.Quad {
-		InitCommand=function(self) self:vertalign(middle):zoomto(SCREEN_WIDTH,0):xy(SCREEN_CENTER_X,SCREEN_CENTER_Y):diffuse(color("#990c0c")):draworder(105) end,
-		StartTransitioningCommand=function(self)
-			self:decelerate(0.2):zoomtoheight(120)
+			self:diffusealpha(0):sleep(2.0):linear(0.2):diffusealpha(1):sleep(4.2):linear(1):diffusealpha(0)
 		end;
 	};
 	Def.Sprite {
-		Texture="_failed",
-		InitCommand=function(self) self:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y):draworder(105) end,
+		Texture="_you_died_text",
+		InitCommand=function(self) self:xy(SCREEN_CENTER_X,SCREEN_CENTER_Y):draworder(105):zoom(0.8) end,
 		StartTransitioningCommand=function(self)
-			self:diffusealpha(0):sleep(0.18):linear(0.2):diffusealpha(1)
-		end;
-	};
-	-- };
-	
-	Def.Quad{
-		InitCommand=function(self)
-			self:FullScreen():diffuse(color("#000000")):diffusealpha(0)
-		end;
-		StartTransitioningCommand=function(self)
-			self:finishtweening():sleep(1.0):linear(2):diffusealpha(1)
+			self:diffusealpha(0):sleep(2.0):linear(4):zoom(1):diffusealpha(1):sleep(0.2):linear(0.3):diffusealpha(0)
 		end;
 	};
 	LoadActor(THEME:GetPathS( Var "LoadingScreen", "failed" ) ) .. {
