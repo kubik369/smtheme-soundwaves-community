@@ -41,12 +41,12 @@ return function(Steps)
 		end
 
         for k,v in pairs( GAMESTATE:GetCurrentSong():GetNoteData(chartint) ) do
-            if TD:GetElapsedTimeFromBeat(v[1]) > mMargin then
+            while TD:GetElapsedTimeFromBeat(v[1]) > mMargin do
                 local originalval = mDuration == 0 and 0 or CalcNPS(measureNotes,mDuration)
                 measureNPS = math.round(originalval)
                 PeakNPS = (measureNPS > PeakNPS or originalval > PeakNPS) and originalval or PeakNPS
-                if(measureNotes >= 15) then
-                    streamMeasures[#streamMeasures+1] = measureCount+1
+                if(measureNotes >= 16) then
+                    streamMeasures[#streamMeasures+1] = measureCount
                 end
 
                 -- Reset stuff
@@ -56,10 +56,10 @@ return function(Steps)
                 measureCount = measureCount + 1
                 mDuration = TD:GetElapsedTimeFromBeat((measureCount+1)*4) - TD:GetElapsedTimeFromBeat(measureCount*4)
                 mMargin = (TD:GetElapsedTimeFromBeat(measureCount*4) + mDuration)
-            else
-				if TD:IsJudgableAtBeat(v[1]) and allowednotes[v[3]] then
-					measureNotes = measureNotes + 1
-				end
+            end
+
+            if TD:IsJudgableAtBeat(v[1]) and allowednotes[v[3]] then
+                measureNotes = measureNotes + 1
             end
         end
 
