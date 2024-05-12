@@ -8,17 +8,15 @@ local allowedNotes = {
 	["TapNoteType_HoldTail"] = true,
 }
 
-local minimumNotesInStreamMeasure = 16
 local movingAverageSectionSeconds = 2
 
 -- returns
 -- peak NPS (number)
 -- note density (table of seconds : NPS)
--- stream measures (table of measures : bool)
 return function(steps)
 
 	if not steps then
-		return 0, {}, {} 
+		return 0, {}
 	end
 
 	-- this is kinda meh, no? 
@@ -71,7 +69,6 @@ return function(steps)
 		end 
 	end
 
-	return peakNPS, movingAverage, {}
-
+	return peakNPS, movingAverage
 
 end

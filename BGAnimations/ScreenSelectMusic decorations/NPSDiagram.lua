@@ -7,13 +7,13 @@ local colorrange = function(val,range,color1,color2)
     return lerp_color( (val/range), color1, color2  )
 end
 
-local peak,npst,NMeasure,mcount = 0,{},{},0
+local peak,npst,streamlikeMeasures,measureCount = 0,{},{},0
 
 local GetStreamBreakdown = function(Player)
     if GAMESTATE:GetCurrentSong() and GAMESTATE:GetCurrentSteps(Player) then
-        local streams = LoadModule("Chart.GetStreamMeasure.lua")(NMeasure, 2, mcount)
+        local streams = LoadModule("Chart.GetStreamMeasure.lua")(streamlikeMeasures, 2, measureCount)
         if not streams then return "" end
-        
+
         local streamLengths = {}
         
         for i, stream in ipairs(streams) do
@@ -24,6 +24,7 @@ local GetStreamBreakdown = function(Player)
         end
         
         return table.concat(streamLengths, "/")
+        
     end
     return ""
 end
@@ -53,15 +54,15 @@ local amv = Def.ActorFrame{
                 if GAMESTATE:GetCurrentSong() and GAMESTATE:IsHumanPlayer(pn) and GAMESTATE:GetCurrentSteps(pn) then
                     -- Grab every instance of the NPS data.
                     local step = GAMESTATE:GetCurrentSteps(pn)
-                    peak,npst,NMeasure = LoadModule("Chart.GetNPS.lua")( step )
-				    if npst then
-					    for t ,v in pairs( npst ) do
-							local x = scale( t, 0, #npst,
+                    peak,nps = LoadModule("Chart.GetNPS.lua")( step )
+                    streamlikeMeasures, measureCount = LoadModule("Chart.GetStreamlikeMeasures.lua")( step )
+				    if nps then
+					    for t ,v in pairs( nps ) do
+							local x = scale( t, 0, #nps,
 								-(p2paneoffset/2)+5, (p2paneoffset/2)-5
 							)
 							-- Now scale that position on v to the y coordinate.
                             local y = math.round( scale( v, 0, peak, 60, -50 ) )
-                            Trace("t x y = " .. t .. " " .. x .. " " .. y)
 							if y < -50 then y = -50 end
                             local colrange = colorrange( v, peak, ColorDarkTone(PlayerColor(pn)), Color.Purple )
 							-- And send them to the table to be rendered.
