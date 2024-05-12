@@ -13,7 +13,6 @@ local GetStreamBreakdown = function(Player)
     if GAMESTATE:GetCurrentSong() and GAMESTATE:GetCurrentSteps(Player) then
         local streams = LoadModule("Chart.GetStreamMeasure.lua")(streamlikeMeasures, 2, measureCount)
         if not streams then return "" end
-
         local streamLengths = {}
         
         for i, stream in ipairs(streams) do
@@ -23,8 +22,7 @@ local GetStreamBreakdown = function(Player)
             end
         end
         
-        return table.concat(streamLengths, "/")
-        
+        return table.concat(streamLengths, "/")  
     end
     return ""
 end
