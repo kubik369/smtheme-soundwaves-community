@@ -53,17 +53,15 @@ local amv = Def.ActorFrame{
                 if GAMESTATE:GetCurrentSong() and GAMESTATE:IsHumanPlayer(pn) and GAMESTATE:GetCurrentSteps(pn) then
                     -- Grab every instance of the NPS data.
                     local step = GAMESTATE:GetCurrentSteps(pn)
-                    peak,npst,NMeasure,mcount = LoadModule("Chart.GetNPS.lua")( step )
+                    peak,npst,NMeasure = LoadModule("Chart.GetNPS.lua")( step )
 				    if npst then
-					    for k,v in pairs( npst ) do
-							-- Each NPS area is per MEASURE. not beat. So multiply the area by 4 beats.
-							local t = step:GetTimingData():GetElapsedTimeFromBeat((k-1)*4)
-							-- With this conversion on t, we now apply it to the x coordinate.
-							local x = scale( t, math.min(step:GetTimingData():GetElapsedTimeFromBeat(0), 0), GAMESTATE:GetCurrentSong():GetLastSecond(),
+					    for t ,v in pairs( npst ) do
+							local x = scale( t, 0, #npst,
 								-(p2paneoffset/2)+5, (p2paneoffset/2)-5
 							)
 							-- Now scale that position on v to the y coordinate.
                             local y = math.round( scale( v, 0, peak, 60, -50 ) )
+                            Trace("t x y = " .. t .. " " .. x .. " " .. y)
 							if y < -50 then y = -50 end
                             local colrange = colorrange( v, peak, ColorDarkTone(PlayerColor(pn)), Color.Purple )
 							-- And send them to the table to be rendered.
