@@ -2,22 +2,28 @@ local ColorTable = LoadModule("Theme.Colors.lua")( LoadModule("Config.Load.lua")
 return Def.ActorFrame {
 	Def.Quad {
 		InitCommand=function(self)
-			self:zoomto(512,128):diffuse( ColorTable["SSMHelpPopup"] ):shadowlength(1)
-		end;		
-	};
-	
+			self:zoomto(512,160):diffuse( ColorTable["SSMHelpPopup"] ):shadowlength(1)
+		end
+	},
 	Def.BitmapText {
 		Font="_Condensed Semibold";	
-		InitCommand=function(self) self:horizalign(center):maxwidth(400):xy(0,-30) end;
+		InitCommand=function(self) self:horizalign(center):maxwidth(400):xy(0,-40) end,
 		OnCommand=function(self) 
 			self:settext(THEME:GetString("ScreenSelectMusic","ChangeDifficulty"))
-		end;
-	};	
+		end
+	},
 	Def.BitmapText {
-		Font="_Condensed Semibold";	
-		InitCommand=function(self) self:horizalign(center):maxwidth(400):xy(0,30) end;
+		Font="_Condensed Semibold",
+		InitCommand=function(self) self:horizalign(center):maxwidth(400):xy(0,0) end,
 		OnCommand=function(self) 
 			self:settext(THEME:GetString("ScreenSelectMusic","ChangeSort"))
-		end;
-	};
-};
+		end
+	},
+	Def.BitmapText {
+		Font="_Condensed Semibold",
+		InitCommand=function(self) self:horizalign(center):maxwidth(400):xy(0,40) end,
+		OnCommand=function(self) 
+			self:settext(THEME:GetString("ScreenSelectMusic","AddFavorites"))
+		end
+	}
+}

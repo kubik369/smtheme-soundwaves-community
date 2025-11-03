@@ -331,19 +331,20 @@ end
 				end
 			end,
 
-				Def.BitmapText {
+				-- Score display
+				Def.PercentageDisplay{
+					AutoRefresh=true,
 					Condition = GAMESTATE:GetPlayMode() ~= "PlayMode_Endless",
-					Font="_Plex Numbers 40px",
+					Percent=Def.BitmapText{
+						Font="_Plex Numbers 40px",
+						InitCommand=function(self)
+							self:shadowlength( stp and 2 or 0 )
+							:xy(score_x_position,26):zoom(0.75)
+							:diffuse(ColorLightTone(PlayerCompColor(pn))):diffusebottomedge(PlayerColor(pn)):maxwidth(SCREEN_WIDTH*0.2234375)
+						end,
+					},
 					InitCommand=function(self)
-						self:shadowlength( stp and 2 or 0 )
-						:xy(score_x_position,26):zoom(0.75)
-						:diffuse(ColorLightTone(PlayerCompColor(pn))):diffusebottomedge(PlayerColor(pn)):maxwidth(SCREEN_WIDTH*0.2234375)
-						:settext(PREFSMAN:GetPreference("PercentageScoring") and " 0.00%" or 0)
-					end,
-					JudgmentMessageCommand=function(self,p)
-						if p.Player == pn then
-							self:settext(GetPlScore(pn))
-						end
+						self:LoadFromStats( GAMESTATE:GetPlayerState(pn), STATSMAN:GetCurStageStats():GetPlayerStageStats(pn) )
 					end,
 					OffCommand=function(self) self:sleep(0.15):decelerate(0.3):addy(-75) end
 				},

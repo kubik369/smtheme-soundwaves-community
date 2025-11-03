@@ -19,6 +19,13 @@ return function(steps)
 		return 0, {}
 	end
 
+	for _,v in ipairs( eval_radar) do
+		if Steps:GetRadarValues(pn):GetValue("RadarCategory_"..v) > 9999 then
+			print("RadarCategory_"..v.." To Many Notes.")
+			return 0,0,0,0
+		end
+	end
+
 	-- this is kinda meh, no? 
 	local chartInt = 1
 	for k, v in pairs(GAMESTATE:GetCurrentSong():GetAllSteps()) do

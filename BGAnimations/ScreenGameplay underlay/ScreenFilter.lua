@@ -55,6 +55,13 @@ if numPlayers == 1 then
 						self:diffusebottomedge(ColorLightTone(PlayerColor(player)))
 					end
 				self:diffusealpha(filterAlphas[player])
+
+				-- If we're in taiko, it's a special case.
+				if GAMESTATE:GetCurrentGame():GetName() == "taiko" then
+					self:y( SCREENMAN:GetTopScreen():GetChild("PlayerP"..pNum):GetY() )
+					:halign(0):x(0)
+					:zoomto( SCREEN_WIDTH, 64 * 3 )
+				end
 			end
 		}
 	end
@@ -94,6 +101,13 @@ else
 								self:diffusebottomedge(ColorLightTone(PlayerColor(player)))
 							end
 						self:diffusealpha(filterAlphas[player])
+
+						-- If we're in taiko, it's a special case.
+						if GAMESTATE:GetCurrentGame():GetName() == "taiko" then
+							self:y( SCREENMAN:GetTopScreen():GetChild("PlayerP"..pNum):GetY() )
+							:halign(0):x(0)
+							:zoomto( SCREEN_WIDTH, 64 * 3 )
+						end
 					end
 				}
 			end
