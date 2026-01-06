@@ -7,13 +7,12 @@ local colorrange = function(val,range,color1,color2)
     return lerp_color( (val/range), color1, color2  )
 end
 
-local peak,npst,NMeasure,mcount = 0,{},{},0
+local peak,npst,streamlikeMeasures,measureCount = 0,{},{},0
 
 local GetStreamBreakdown = function(Player)
     if GAMESTATE:GetCurrentSong() and GAMESTATE:GetCurrentSteps(Player) then
-        local streams = LoadModule("Chart.GetStreamMeasure.lua")(NMeasure, 2, mcount)
+        local streams = LoadModule("Chart.GetStreamMeasure.lua")(streamlikeMeasures, 2, measureCount)
         if not streams then return "" end
-        
         local streamLengths = {}
         
         for i, stream in ipairs(streams) do
@@ -23,7 +22,7 @@ local GetStreamBreakdown = function(Player)
             end
         end
         
-        return table.concat(streamLengths, "/")
+        return table.concat(streamLengths, "/")  
     end
     return ""
 end
@@ -53,13 +52,11 @@ local amv = Def.ActorFrame{
                 if GAMESTATE:GetCurrentSong() and GAMESTATE:IsHumanPlayer(pn) and GAMESTATE:GetCurrentSteps(pn) then
                     -- Grab every instance of the NPS data.
                     local step = GAMESTATE:GetCurrentSteps(pn)
-                    peak,npst,NMeasure,mcount = LoadModule("Chart.GetNPS.lua")( step )
-				    if npst then
-					    for k,v in pairs( npst ) do
-							-- Each NPS area is per MEASURE. not beat. So multiply the area by 4 beats.
-							local t = step:GetTimingData():GetElapsedTimeFromBeat((k-1)*4)
-							-- With this conversion on t, we now apply it to the x coordinate.
-							local x = scale( t, math.min(step:GetTimingData():GetElapsedTimeFromBeat(0), 0), GAMESTATE:GetCurrentSong():GetLastSecond(),
+                    peak,nps = LoadModule("Chart.GetNPS.lua")( step )
+                    streamlikeMeasures, measureCount = LoadModule("Chart.GetStreamlikeMeasures.lua")( step )
+				    if nps then
+					    for t ,v in pairs( nps ) do
+							local x = scale( t, 0, #nps,
 								-(p2paneoffset/2)+5, (p2paneoffset/2)-5
 							)
 							-- Now scale that position on v to the y coordinate.
